@@ -15,7 +15,7 @@ void print_list(const listint_t *list)
 	{
 		if (i > 0)
 			printf(", ");
-		print("%d", list->n);
+		printf("%d", list->n);
 		++i;
 		list = list->next;
 	}
