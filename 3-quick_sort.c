@@ -1,36 +1,73 @@
 #include "sort.h"
 
 /**
- * selection_sort - Sorts an array of integers in ascending order
- *                   using the Selection sort algorithm
+ * quick_sort - Sorts an array of integers in ascending order
+ *              using the Quick sort algorithm with Lomuto partition scheme
  * @array: Array to be sorted
  * @size: Size of the array
  */
-
 void quick_sort(int *array, size_t size)
 {
-	size_t i, j, min_idx;
-	int temp;
-
 	if (array == NULL || size < 2)
 		return;
 
-	for (i = 0; i < size - 1; i++)
+	quicksort_recursive(array, 0, size - 1);
+}
+
+/**
+ * quicksort_recursive - Recursively sorts an array of integers using
+ *                       the Quick sort algorithm with Lomuto partition scheme
+ * @array: Array to be sorted
+ * @low: Starting index of the partition to be sorted
+ * @high: Ending index of the partition to be sorted
+ */
+
+void quicksort_recursive(int *array, int low, int high)
+{
+	if (low < high)
 	{
-		min_idx = i;
+		int pi = lomuto_partition(array, low, high);
 
-		for (j = i + 1; j < size; j++)
-		{
-			if (array[j] < array[min_idx])
-				min_idx = j;
-		}
+		printf("\n");
+		print_array(array, high - low + 1);
 
-		if (min_idx != i)
+		quicksort_recursive(array, low, pi - 1);
+		quicksort_recursive(array, pi + 1, high);
+	}
+}
+
+/**
+ * lomuto_partition - Partitions an array of integers using
+ *                    the Lomuto partition scheme for Quick sort
+ * @array: Array to be partitioned
+ * @low: Starting index of the partition
+ * @high: Ending index of the partition
+ *
+ * Return: Index of the pivot element after partitioning
+ */
+
+int lomuto_partition(int *array, int low, int high)
+{
+	int pivot = array[high];
+	int i = low - 1;
+	int j, temp;
+
+	for (j = low; j <= high - 1; j++)
+	{
+		if (array[j] < pivot)
 		{
-			temp = array[i];
-			array[i] = array[min_idx];
-			array[min_idx] = temp;
-			print_array(array, size);
+			i++;
+			if (i != j)
+			{
+				temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+			}
 		}
 	}
+	temp = array[i + 1];
+	array[i + 1] = array[high];
+	array[high] = temp;
+
+	return (i + 1);
 }
